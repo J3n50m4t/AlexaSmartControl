@@ -18,6 +18,12 @@ void setup() {
 }
 
 void setup_wifi() {
+// lange Deco leiste
+  pinMode(4, OUTPUT);
+  //lampions
+  pinMode(0, OUTPUT);
+  //Vase
+  pinMode(14, OUTPUT);
 
   delay(10);
   Serial.print("Connecting to ");
@@ -36,12 +42,11 @@ void setup_wifi() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-
-  Serial.println();
+  
+  
   switch ((char)payload[0])
   {
     case 'D':
-      pinMode(4, OUTPUT);
       if ((char)payload[1] == '1'){
         digitalWrite(4, HIGH);
         Serial.print("Deko an");
@@ -51,14 +56,52 @@ void callback(char* topic, byte* payload, unsigned int length) {
         Serial.print("Deko aus");
       }
       break;
+    
+    case 'L':
+      if ((char)payload[1] == '1'){
+        digitalWrite(0, HIGH);
+        Serial.print("Lampion an");
+      }
+      else {
+        digitalWrite(0, LOW);
+        Serial.print("Lampion aus");
+      }
+      break;
+    
+    case 'V':
+      if ((char)payload[1] == '1'){
+        digitalWrite(14, HIGH);
+        Serial.print("Vase an");
+      }
+      else {
+        digitalWrite(14, LOW);
+        Serial.print("Vase aus");
+      }
+      break;
 
-    case '1':
-      Serial.print("Das war eine 1");
-      digitalWrite(2, LOW);
+    case 'A':
+      if ((char)payload[1] == '1'){
+        digitalWrite(0, HIGH);
+        digitalWrite(4, HIGH);
+        digitalWrite(14, HIGH);
+        Serial.print("Alles an");
+      }
+      else {
+        digitalWrite(0, LOW);
+        digitalWrite(4, LOW);
+        digitalWrite(14, LOW);
+        Serial.print("Alles aus");
+      }
       break;
       
     default:
-      digitalWrite(2, HIGH);
+      Serial.print("Message arrived [");
+      Serial.print(topic);
+      Serial.print("] ");
+      for (int i = 0; i < length; i++) {
+        Serial.print((char)payload[i]);
+      }
+      Serial.println();
       break;
   }
   Serial.println();
