@@ -14,7 +14,7 @@ PubSubClient client(espClient);
 // arduino_name will be used as topic to publish 
 // arduino_name livingroom will publish to livingroomtemperature
 //
-String arduino_name
+char* arduino_name
 DHT dht(DHTPIN, DHTTYPE);
 
 long lastMsg = 0;
