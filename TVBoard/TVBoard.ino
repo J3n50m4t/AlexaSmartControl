@@ -9,8 +9,13 @@ PubSubClient client(espClient);
 #define DHTPIN 12
 #define DHTTYPE DHT22
 
+//
+// Adjust these Options!
+// arduino_name will be used as topic to publish 
+// arduino_name livingroom will publish to livingroomtemperature
+//
+String arduino_name
 DHT dht(DHTPIN, DHTTYPE);
-
 
 long lastMsg = 0;
 char msg[50];
@@ -54,7 +59,7 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect("ArduinoDeko", mqtt_user, mqtt_password)) {
+    if (client.connect(arduino_name, mqtt_user, mqtt_password)) {
       Serial.println("connected");
       client.publish("connectState", "connected");
       client.subscribe("switchCommand");
@@ -82,7 +87,7 @@ void loop() {
     }
     temp_str = String(temperature);
     temp_str.toCharArray(temp, temp_str.length() + 1); //packaging up the data to publish to mqtt whoa...
-    client.publish("tvboardtemp", temp);
+    client.publish(arduino_name + "temperature", temp);
     timeSinceLastRead = 0;
   }
   delay(100);
