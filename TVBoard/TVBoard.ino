@@ -41,6 +41,8 @@ void setup_wifi() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  WiFi.mode(WIFI_STA);
+  Serial.println("WiFi.Mode set to STA");
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
